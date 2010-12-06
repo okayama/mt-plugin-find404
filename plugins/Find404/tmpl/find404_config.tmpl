@@ -1,0 +1,39 @@
+<style type="text/css">
+    .mediumHeader {
+        border-bottom: 1px solid #cddee7;
+        padding-bottom: 3px;
+        margin-bottom: 25px;
+    }
+    .subHeader {
+        border-bottom: 1px dotted #cddee7;
+        padding-bottom: 3px;
+        margin-bottom: 25px;
+    }
+</style>
+<h3 class="mediumHeader"><__trans phrase="Settings for URL"></h3>
+<mtapp:setting
+    id="find404_url"
+    label="<__trans phrase="Check URL">">
+    <textarea name="find404_url" id="find404_url"><mt:var name="find404_url" escape="html"></textarea>
+</mtapp:setting>
+<h3 class="mediumHeader"><__trans phrase="Settings for mail"></h3>
+<mtapp:setting
+    id="mail_subject"
+    label="<__trans phrase="Mail subject">">
+    <input type="text" class="text" name="mail_subject" value="<mt:var name="mail_subject" escape="html">" />
+</mtapp:setting>
+<mtapp:setting
+    id="mail_body"
+    label="<__trans phrase="Mail body">">
+    <textarea name="mail_body" id="mail_body"><mt:var name="mail_body" escape="html"></textarea>
+</mtapp:setting>
+<mtapp:setting
+    id="mail_to"
+    label="<__trans phrase="Mail to">">
+    <textarea name="mail_to" id="mail_to"><mt:var name="mail_to" escape="html"></textarea>
+</mtapp:setting>
+<mtapp:setting
+    id="mail_from"
+    label="<__trans phrase="Mail from">">
+    <input type="text" class="text" name="mail_from" value="<mt:var name="mail_from" escape="html">" />
+</mtapp:setting>
