@@ -1,0 +1,15 @@
+#!/usr/bin/perl -w
+use strict;
+use lib qw( lib ../lib );
+use lib qw( extlib ../extlib );
+use lib qw( plugins/Remtter/lib plugins/Remtter/extlib );
+
+use MT;
+
+my $app = MT->instance;
+if ( my $plugin = MT->component( 'Find404' ) ) {
+    require Find404::Tasks;
+    Find404::Tasks::_task_find404();
+}
+
+1;

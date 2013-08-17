@@ -1,56 +1,18 @@
-package MT::Plugin::Find404;
+package Find404::Tasks;
 use strict;
-use MT;
-use MT::Plugin;
-use base qw( MT::Plugin );
 
 use MT::Util qw( is_valid_url offset_time_list );
-
-our $PLUGIN_NAME = 'Find404';
-our $PLUGIN_VERSION = '1.0';
-
-my $plugin = new MT::Plugin::Find404( {
-    id => $PLUGIN_NAME,
-    key => lc $PLUGIN_NAME,
-    name => $PLUGIN_NAME,
-    version => $PLUGIN_VERSION,
-    description => '<MT_TRANS phrase=\'Available Find404.\'>',
-    author_name => 'okayama',
-    author_link => 'http://weeeblog.net/',
-    blog_config_template => 'find404_config.tmpl',
-    settings => new MT::PluginSettings( [
-        [ 'find404_url' ],
-        [ 'mail_subject' ],
-        [ 'mail_body' ],
-        [ 'mail_to' ],
-        [ 'mail_from' ],
-    ] ),
-    l10n_class => 'MT::Find404::L10N',
-    system_config_template => lc $PLUGIN_NAME . '_config.tmpl',
-} );
-MT->add_plugin( $plugin );
-
-sub init_registry {
-    my $plugin = shift;
-    $plugin->registry( {
-        tasks => {
-            find404 => {
-                label => 'Find404 Task',
-                frequency => 5,
-                code => \&_task_find404,
-            },
-        },
-   } );
-}
+use MT::Mail;
 
 sub _task_find404 {
+    my $plugin = MT->component( 'Find404' );
     if ( my $find404_url = $plugin->get_config_value( 'find404_url' ) ) {
-        my @urls = split( /\n/, $find404_url );
+        my @urls = split( /\r?\n/, $find404_url );
         for my $url ( @urls ) {
             next unless $url;
             next unless is_valid_url( $url );
             my $ua = MT->new_ua( { timeout => 10 } );
-            my $req = new HTTP::Request( GET => $url );
+            my $req = HTTP::Request->new( GET => $url );
             my $response = $ua->request( $req );
             if ( ! $response->is_success() ) {
                 if ( my $mail_to = $plugin->get_config_value( 'mail_to' ) ) {
@@ -66,10 +28,9 @@ sub _task_find404 {
                         );
                         $mail_subject = _build_tmpl( $mail_subject, $blog->id, \%params );
                         $mail_body = _build_tmpl( $mail_body, $blog->id, \%params );
-                        my @mail_to = split( /\n/, $mail_to );
-                        my $to = join( ',', @mail_to );
-                        my %head = (   
-                            To => $to,
+                        my @mail_to = split( /\r?\n/, $mail_to );
+                        my %head = (
+                            To => \@mail_to,
                             From => $mail_from,
                             Subject => $mail_subject,
                         );

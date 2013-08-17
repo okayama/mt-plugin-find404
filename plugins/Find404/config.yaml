@@ -1,0 +1,21 @@
+id: Find404
+name: Find404
+key: find404
+version: 1.1
+description: <__trans phrase='Available Find404.'>
+author_name: okayama
+author_link: http://weeeblog.net/
+blog_config_template: find404_config.tmpl
+settings:
+    find404_url:
+    mail_subject:
+    mail_body:
+    mail_to:
+    mail_from:
+l10n_class: Find404::L10N
+system_config_template: find404_config.tmpl
+tasks:
+    find404:
+        label: Find404 Task
+        frequency: 5
+        code: $find404::Find404::Tasks::_task_find404
